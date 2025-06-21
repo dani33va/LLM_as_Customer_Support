@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
@@ -71,6 +70,19 @@ function App() {
     setContext('');
   };
 
+  const handleModelChange = (e) => {
+    setSelectedModel(e.target.value);
+    handleStartNewChat();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+    // Shift+Enter will work as default (new line)
+  };
+
   return (
     <div className="app-container">
       <header className="app-header">
@@ -80,7 +92,7 @@ function App() {
           <select 
             id="model-select"
             value={selectedModel}
-            onChange={(e) => setSelectedModel(e.target.value)}
+            onChange={handleModelChange}
             disabled={isLoading}
           >
             {availableModels.map(model => (
@@ -133,12 +145,18 @@ function App() {
         </div>
 
         <form onSubmit={handleSubmit} className="chat-input">
-          <input
-            type="text"
+          <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
+            onKeyDown={handleKeyDown}
+            placeholder="Type your message... (Shift+Enter for new line)"
             disabled={isLoading}
+            rows={1}
+            style={{ resize: 'none' }}
+            onInput={(e) => {
+              e.target.style.height = 'auto';
+              e.target.style.height = e.target.scrollHeight + 'px';
+            }}
           />
           <button type="submit" disabled={isLoading}>
             Send
