@@ -1,5 +1,7 @@
 token.txt
 results/
+*.doc
+*.docx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
